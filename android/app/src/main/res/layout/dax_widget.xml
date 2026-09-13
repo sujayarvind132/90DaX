@@ -3,44 +3,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#090B0A">
+    android:padding="12dp"
+    android:background="@drawable/widget_card">
 
-    <TextView
-        android:id="@+id/widget_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="90DaX"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <TextView android:id="@+id/widget_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="90DaX" android:textColor="#FFFFFF" android:textSize="19sp" android:textStyle="bold" />
+            <TextView android:id="@+id/widget_subtitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TODAY • EXECUTION" android:textColor="#8E9791" android:textSize="9sp" android:letterSpacing="0.12" />
+        </LinearLayout>
+        <TextView android:id="@+id/widget_percent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0%" android:textColor="#FFFFFF" android:textSize="22sp" android:textStyle="bold" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/widget_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="0 / 13 activities"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp" />
+    <TextView android:id="@+id/widget_progress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="0 / 13 activities" android:textColor="#B8BDBA" android:textSize="11sp" />
 
-    <TextView
-        android:id="@+id/widget_current"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="Open 90DaX"
-        android:textColor="#B8BDBA"
-        android:textSize="13sp" />
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="8dp" android:background="#28302B" />
 
-    <TextView
-        android:id="@+id/widget_percent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="0% complete"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp" />
+    <LinearLayout android:id="@+id/activity_row_1" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:gravity="center_vertical">
+        <TextView android:id="@+id/activity_text_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:ellipsize="end" android:maxLines="1" android:text="Activity" android:textColor="#FFFFFF" android:textSize="11sp" />
+        <Button android:id="@+id/activity_button_1" android:layout_width="62dp" android:layout_height="34dp" android:background="@drawable/widget_button" android:minHeight="0dp" android:minWidth="0dp" android:padding="0dp" android:text="OPEN" android:textColor="#FFFFFF" android:textSize="9sp" android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/activity_row_2" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:gravity="center_vertical">
+        <TextView android:id="@+id/activity_text_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:ellipsize="end" android:maxLines="1" android:text="Activity" android:textColor="#FFFFFF" android:textSize="11sp" />
+        <Button android:id="@+id/activity_button_2" android:layout_width="62dp" android:layout_height="34dp" android:background="@drawable/widget_button" android:minHeight="0dp" android:minWidth="0dp" android:padding="0dp" android:text="OPEN" android:textColor="#FFFFFF" android:textSize="9sp" android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/activity_row_3" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:gravity="center_vertical">
+        <TextView android:id="@+id/activity_text_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:ellipsize="end" android:maxLines="1" android:text="Activity" android:textColor="#FFFFFF" android:textSize="11sp" />
+        <Button android:id="@+id/activity_button_3" android:layout_width="62dp" android:layout_height="34dp" android:background="@drawable/widget_button" android:minHeight="0dp" android:minWidth="0dp" android:padding="0dp" android:text="OPEN" android:textColor="#FFFFFF" android:textSize="9sp" android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/activity_row_4" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:gravity="center_vertical">
+        <TextView android:id="@+id/activity_text_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:ellipsize="end" android:maxLines="1" android:text="Activity" android:textColor="#FFFFFF" android:textSize="11sp" />
+        <Button android:id="@+id/activity_button_4" android:layout_width="62dp" android:layout_height="34dp" android:background="@drawable/widget_button" android:minHeight="0dp" android:minWidth="0dp" android:padding="0dp" android:text="OPEN" android:textColor="#FFFFFF" android:textSize="9sp" android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/activity_row_5" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:gravity="center_vertical">
+        <TextView android:id="@+id/activity_text_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:ellipsize="end" android:maxLines="1" android:text="Activity" android:textColor="#FFFFFF" android:textSize="11sp" />
+        <Button android:id="@+id/activity_button_5" android:layout_width="62dp" android:layout_height="34dp" android:background="@drawable/widget_button" android:minHeight="0dp" android:minWidth="0dp" android:padding="0dp" android:text="OPEN" android:textColor="#FFFFFF" android:textSize="9sp" android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:gravity="center">
+        <Button android:id="@+id/nav_today" android:layout_width="0dp" android:layout_height="30dp" android:layout_weight="1" android:background="@drawable/widget_button" android:minHeight="0dp" android:text="TODAY" android:textColor="#FFFFFF" android:textSize="8sp" />
+        <Button android:id="@+id/nav_goals" android:layout_width="0dp" android:layout_height="30dp" android:layout_weight="1" android:layout_marginStart="4dp" android:background="@drawable/widget_button" android:minHeight="0dp" android:text="GOALS" android:textColor="#FFFFFF" android:textSize="8sp" />
+        <Button android:id="@+id/nav_plan" android:layout_width="0dp" android:layout_height="30dp" android:layout_weight="1" android:layout_marginStart="4dp" android:background="@drawable/widget_button" android:minHeight="0dp" android:text="PLAN" android:textColor="#FFFFFF" android:textSize="8sp" />
+        <Button android:id="@+id/nav_progress" android:layout_width="0dp" android:layout_height="30dp" android:layout_weight="1" android:layout_marginStart="4dp" android:background="@drawable/widget_button" android:minHeight="0dp" android:text="PROGRESS" android:textColor="#FFFFFF" android:textSize="8sp" />
+    </LinearLayout>
 </LinearLayout>

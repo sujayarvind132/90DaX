@@ -4,6 +4,8 @@
     <application
         android:theme="@style/Theme.DaX"
         android:label="90DaX"
+        android:icon="@drawable/ic_90dax"
+        android:roundIcon="@drawable/ic_90dax"
         android:allowBackup="true"
         android:supportsRtl="true">
 

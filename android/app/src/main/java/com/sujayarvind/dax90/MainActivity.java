@@ -2,42 +2,81 @@ package com.sujayarvind.dax90;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.content.Intent;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
+import android.content.Intent;
+import android.net.Uri;
 
 public class MainActivity extends Activity {
+    private static final String APP_URL = "https://sujayarvind132.github.io/90DaX/";
     private WebView webView;
+    private boolean pageFailed = false;
     private final Handler handler = new Handler();
     private final Runnable syncRunnable = new Runnable() {
         @Override public void run() { syncFromWebApp(); handler.postDelayed(this, 15000); }
     };
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface"})
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         webView = new WebView(this);
+        webView.setBackgroundColor(Color.rgb(9, 11, 10));
+        webView.setLayerType(WebView.LAYER_TYPE_HARDWARE, null);
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
+        settings.setAllowFileAccess(false);
+        settings.setAllowContentAccess(false);
+        settings.setBuiltInZoomControls(false);
+        settings.setDisplayZoomControls(false);
+        settings.setLoadsImagesAutomatically(true);
+        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         settings.setUserAgentString(settings.getUserAgentString() + " 90DaX-Android");
         webView.setWebViewClient(new WebViewClient() {
+            @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return false;
+            }
+
             @Override public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                pageFailed = false;
                 syncFromWebApp();
                 handler.removeCallbacks(syncRunnable);
                 handler.postDelayed(syncRunnable, 15000);
                 handleWidgetIntent(getIntent());
             }
+
+            @Override public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                if (request.isForMainFrame()) showConnectionFallback();
+            }
         });
         webView.addJavascriptInterface(new DaXBridge(), "Android90DaX");
-        webView.loadUrl("https://sujayarvind132.github.io/90DaX/");
         setContentView(webView);
+        loadApp();
+    }
+
+    private void loadApp() {
+        pageFailed = false;
+        // Cache-busting prevents an old WebView asset cache from mixing with a new GitHub Pages build.
+        webView.loadUrl(APP_URL + "?android=1&v=" + System.currentTimeMillis());
+    }
+
+    private void showConnectionFallback() {
+        if (pageFailed || webView == null) return;
+        pageFailed = true;
+        webView.loadDataWithBaseURL(APP_URL,
+            "<!doctype html><html><head><meta name='viewport' content='width=device-width,initial-scale=1'><style>html,body{margin:0;background:#090b0a;color:#fff;font-family:Arial,sans-serif;height:100%}body{display:flex;align-items:center;justify-content:center}.box{text-align:center;padding:28px}.x{font-size:48px;color:#20e878;font-weight:800}.title{font-size:22px;font-weight:700;margin:12px 0 8px}.text{color:#9aa29d;font-size:14px;line-height:1.5}.btn{margin-top:20px;padding:12px 18px;border:0;border-radius:10px;background:#20e878;color:#061009;font-weight:700;font-size:14px}</style></head><body><div class='box'><div class='x'>90DaX</div><div class='title'>Unable to load 90DaX</div><div class='text'>Please check your internet connection and try again.</div><button class='btn' onclick="location.href='https://sujayarvind132.github.io/90DaX/?android=1&retry='+Date.now()">RETRY</button></div></body></html>",
+            "text/html", "UTF-8", null);
     }
 
     @Override protected void onNewIntent(Intent intent) { super.onNewIntent(intent); setIntent(intent); handleWidgetIntent(intent); }
@@ -55,7 +94,7 @@ public class MainActivity extends Activity {
     }
 
     private void syncFromWebApp() {
-        if(webView==null)return;
+        if(webView==null || pageFailed)return;
         String js="(function(){try{"+
           "const a=JSON.parse(localStorage.getItem('90dax-activities')||'null')||[];"+
           "const d=new Date(),k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');"+

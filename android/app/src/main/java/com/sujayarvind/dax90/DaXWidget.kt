@@ -1,11 +1,11 @@
 package com.sujayarvind.dax90
 
 import android.content.Context
+import android.graphics.Color
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.action.actionStartActivity
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.updateAll
 import androidx.glance.background
@@ -19,19 +19,15 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import androidx.glance.unit.dp
 import androidx.glance.unit.sp
-import android.graphics.Color
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class DaXWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val prefs = context.getSharedPreferences("dax", 0)
-        val raw = prefs.getString("state", null)
-        val done = Regex("\\\"doneCount\\\"\\s*:\\s*(\\d+)").find(raw ?: "")?.groupValues?.getOrNull(1) ?: "0"
-        val total = Regex("\\\"total\\\"\\s*:\\s*(\\d+)").find(raw ?: "")?.groupValues?.getOrNull(1) ?: "13"
-        val current = Regex("\\\"current\\\"\\s*:\\s*\\\"([^\\\"]*)\\\"").find(raw ?: "")?.groupValues?.getOrNull(1) ?: "Open 90DaX"
+        val raw = context.getSharedPreferences("dax", 0).getString("state", null) ?: ""
+        val done = Regex("\\\"doneCount\\\"\\s*:\\s*(\\d+)").find(raw)?.groupValues?.getOrNull(1) ?: "0"
+        val total = Regex("\\\"total\\\"\\s*:\\s*(\\d+)").find(raw)?.groupValues?.getOrNull(1) ?: "13"
+        val current = Regex("\\\"current\\\"\\s*:\\s*\\\"([^\\\"]*)\\\"").find(raw)?.groupValues?.getOrNull(1) ?: "Open 90DaX"
         provideContent {
-            Column(modifier = GlanceModifier.fillMaxSize().background(androidx.glance.unit.ColorProvider(Color.rgb(9,11,10))).padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+            Column(modifier = GlanceModifier.fillMaxSize().background(ColorProvider(Color.rgb(9,11,10))).padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("90DaX", style = TextStyle(color = ColorProvider(Color.WHITE), fontSize = 18.sp))
                     Text("  •  TODAY", style = TextStyle(color = ColorProvider(Color.LTGRAY), fontSize = 10.sp), modifier = GlanceModifier.padding(start = 5.dp))
@@ -42,7 +38,8 @@ class DaXWidget : GlanceAppWidget() {
             }
         }
     }
-    suspend fun updateAll(context: Context) { DaXWidget().updateAll(context) }
 }
 
-class DaXWidgetReceiver : GlanceAppWidgetReceiver() { override val glanceAppWidget: GlanceAppWidget = DaXWidget() }
+class DaXWidgetReceiver : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = DaXWidget()
+}

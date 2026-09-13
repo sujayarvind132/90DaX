@@ -12,15 +12,35 @@ import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
 class MainActivity : Activity() {
+    private lateinit var webView: WebView
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val webView = WebView(this)
+        webView = WebView(this)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.databaseEnabled = true
-        webView.settings.userAgentString += " 90DaX-Android"
-        webView.webViewClient = WebViewClient()
+        webView.userAgentString += " 90DaX-Android"
+        webView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView, url: String) {
+                view.evaluateJavascript("""
+                    (function(){
+                      function sync(){
+                        try {
+                          const a=JSON.parse(localStorage.getItem('90dax-activities')||'[]');
+                          const c=JSON.parse(localStorage.getItem('90dax-completed')||'{}');
+                          const now=new Date(); const m=now.getHours()*60+now.getMinutes();
+                          let cur=a.find(x=>{let [h,mm]=x.time.split(':').map(Number);let [eh,em]=x.end.split(':').map(Number);let s=h*60+mm,e=eh*60+em;return x.title==='Sleep'?(m>=1410||m<450):(m>=s&&m<e);});
+                          let up=cur||a.find(x=>{let [h,mm]=x.time.split(':').map(Number);return h*60+mm>m;});
+                          Android90DaX.syncState(JSON.stringify({doneCount:Object.keys(c).length,total:a.length,current:(up&&up.title)||'Open 90DaX'}));
+                        } catch(e){}
+                      }
+                      sync(); setInterval(sync,5000);
+                    })();
+                """.trimIndent(), null)
+            }
+        }
         webView.addJavascriptInterface(DaXBridge(this), "Android90DaX")
         webView.loadUrl("https://sujayarvind132.github.io/90DaX/")
         setContentView(webView)
@@ -28,8 +48,7 @@ class MainActivity : Activity() {
     }
 
     override fun onBackPressed() {
-        val w = window.decorView.findViewById<WebView>(android.R.id.content)
-        if (w?.canGoBack() == true) w.goBack() else super.onBackPressed()
+        if (webView.canGoBack()) webView.goBack() else super.onBackPressed()
     }
 }
 
